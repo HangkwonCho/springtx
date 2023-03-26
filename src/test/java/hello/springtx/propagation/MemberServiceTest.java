@@ -125,4 +125,22 @@ class MemberServiceTest {
         assertTrue(memberRepository.find(username).isEmpty());
         assertTrue(logRepository.find(username).isEmpty());
     }
+
+    /**
+     * MemberService @Transactional:ON
+     * MemberRepository @Transactional:OM
+     * LogRepository @Transactional(REQUIRES_NEW):ON Exception
+     */
+    @Test
+    void recoverException_success() {
+        //given
+        String username = "로그예외_recoverException_fail";
+
+        //when
+        memberService.joinV2(username);
+
+        //then: 모든 데이터가 정상 저장된다.
+        assertTrue(memberRepository.find(username).isPresent());
+        assertTrue(logRepository.find(username).isEmpty());
+    }
 }
